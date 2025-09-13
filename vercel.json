@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/roi-calculator",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+    }
+  ],
+  "rewrites": [{ "source": "/roi-calculator", "destination": "/roi-calculator.html" }]
+}
