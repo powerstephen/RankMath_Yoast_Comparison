@@ -8,50 +8,63 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
+    /* Body background = white. Cards remain dark (original look). */
     :root{
-      --ink:#111;--muted:#555;--accent:#7c5cff;--accent2:#22d3ee;--good:#16a34a;--radius:14px
+      --bg:#0b0f17;--panel:#121827;--ink:#e6ecff;--muted:#9aa4b2;--accent:#7c5cff;--accent2:#22d3ee;--good:#22c55e;--radius:16px
     }
     *{box-sizing:border-box}
-    body{margin:0;background:#fff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:24px}
+    body{margin:0;background:#ffffff;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:24px}
     .wrap{max-width:1100px;margin:0 auto}
-    h1{margin:0 0 8px;font-size:32px;letter-spacing:-.02em}
-    .sub{color:var(--muted);margin-bottom:20px}
-    .grid{display:grid;gap:18px;grid-template-columns:1fr 1fr;margin-bottom:20px}
-    .card{background:#fafafa;border:1px solid #ddd;border-radius:var(--radius)}
-    .hd{padding:14px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;background:#f5f5f5}
-    .bd{padding:16px}
-    .pill{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:4px 8px;border-radius:999px}
+    .topbar{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+    .logo{height:28px;width:auto}
+    h1{margin:0;font-size:28px;letter-spacing:-.02em;color:#111}
+    .sub{color:#555;margin:6px 0 18px}
 
-    .fields{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
-    .field{display:flex;flex-direction:column;gap:6px}
+    .grid{display:grid;gap:18px;grid-template-columns:1fr 1fr;margin-bottom:20px}
+
+    /* Dark cards (original styling) */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(0,0,0,.2);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+    .hd{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;background:#0f1628;color:var(--ink)}
+    .bd{padding:16px;background:#0e1525;color:var(--ink)}
+    .pill{font-size:12px;font-weight:800;color:#08111f;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:6px 10px;border-radius:999px}
+
     label{font-size:13px;color:var(--muted)}
-    input[type="number"],.money,select{appearance:none;background:#fff;color:var(--ink);border:1px solid #ccc;border-radius:10px;padding:10px;font-size:14px;outline:none}
-    input:focus,select:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+    .fields{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+    input[type="number"],select{appearance:none;background:#0b1324;color:var(--ink);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px;font-size:14px;outline:none}
+    input:focus,select:focus{border-color:var(--accent2);box-shadow:0 0 0 4px rgba(34,211,238,.15)}
 
     .addons{display:grid;gap:10px;margin-top:8px}
-    .addon{display:grid;grid-template-columns:auto 1fr 120px;gap:10px;align-items:center;background:#fff;border:1px solid #ddd;border-radius:10px;padding:8px}
+    .addon{display:grid;grid-template-columns:auto 1fr 120px;gap:10px;align-items:center;background:#0d1422;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
     .addon label{color:var(--ink)}
 
-    .summary{margin-top:20px}
-    .totals{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-    .total{background:#fff;border:1px dashed #ccc;border-radius:12px;padding:14px}
+    /* Summary section full width */
+    .summary.card .bd{background:#0e1525}
+    .totals{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .total{background:#0d1422;border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:14px}
     .total h3{margin:0 0 6px;color:var(--muted);font-size:13px}
     .total .v{font-size:22px;font-weight:800}
 
     table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{padding:10px 12px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
+    th,td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;font-size:14px}
     th{color:var(--muted)}
-    tfoot td{border-top:1px solid #ddd;font-weight:800}
+    tfoot td{border-top:1px solid rgba(255,255,255,.12);font-weight:800}
 
-    .save{display:flex;justify-content:space-between;align-items:center;margin-top:12px;background:linear-gradient(90deg,rgba(34,211,238,.15),rgba(124,92,255,.15));border:1px solid rgba(124,92,255,.3);padding:14px;border-radius:12px}
-    .delta{font-size:20px;font-weight:800;color:var(--good)}
+    /* One-line savings banner: more obvious */
+    .save-banner{display:flex;align-items:center;gap:14px;justify-content:space-between;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:14px 16px;border-radius:14px;border:1px solid rgba(124,92,255,.45);background:linear-gradient(90deg,rgba(124,92,255,.22),rgba(34,211,238,.22));margin-bottom:10px}
+    .save-banner .label{font-weight:700;letter-spacing:.01em}
+    .save-banner .delta{font-size:22px;font-weight:900;color:var(--good)}
+    .save-banner .pct{color:var(--ink);opacity:.9;font-weight:700}
 
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}.save-banner{flex-wrap:nowrap}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Yoast vs Rank Math – Agency Cost Calculator</h1>
+    <div class="topbar">
+      <!-- Replace src with your hosted logo path -->
+      <img class="logo" src="rank-math-logo.svg" alt="Rank Math Logo" />
+      <h1>Yoast vs Rank Math – Agency Cost Calculator</h1>
+    </div>
     <div class="sub">Compare the true annual cost of Yoast (Premium + plugins) against a single Rank Math Agency license. Adjust values as needed.</div>
 
     <div class="grid">
@@ -66,7 +79,7 @@
             </div>
             <div class="field">
               <label>Currency</label>
-              <select id="currency" class="money"><option>USD</option><option>EUR</option><option>GBP</option></select>
+              <select id="currency"><option>USD</option><option>EUR</option><option>GBP</option></select>
             </div>
             <div class="field">
               <label>Yoast Premium – per site / year</label>
@@ -86,18 +99,23 @@
         <div class="bd">
           <div class="addons" id="addons"></div>
           <div style="display:flex; gap:8px; margin-top:10px">
-            <input id="newAddonLabel" class="money" placeholder="Add‑on name" style="flex:1" />
-            <input id="newAddonPrice" class="money" type="number" min="0" placeholder="$/site/yr" style="width:140px" />
-            <button id="addAddonBtn" style="background:linear-gradient(90deg,var(--accent),var(--accent2)); border:none; color:#fff; font-weight:700; padding:8px 14px; border-radius:8px; cursor:pointer">Add</button>
+            <input id="newAddonLabel" placeholder="Add‑on name" style="flex:1; background:#0b1324; color:var(--ink); border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:10px" />
+            <input id="newAddonPrice" type="number" min="0" placeholder="$/site/yr" style="width:140px; background:#0b1324; color:var(--ink); border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:10px" />
+            <button id="addAddonBtn" style="background:linear-gradient(90deg,var(--accent),var(--accent2)); border:none; color:#08111f; font-weight:800; padding:10px 14px; border-radius:10px; cursor:pointer">Add</button>
           </div>
         </div>
       </section>
     </div>
 
-    <!-- SUMMARY BELOW -->
+    <!-- SUMMARY BELOW (full width) -->
     <div class="card summary">
       <div class="hd"><strong>Summary</strong><span class="pill">Auto‑updates</span></div>
       <div class="bd">
+        <div class="save-banner">
+          <span class="label">Estimated savings with Rank Math</span>
+          <span class="delta" id="savings">$0</span>
+          <span class="pct" id="savingsPct">0% cheaper</span>
+        </div>
         <div class="totals">
           <div class="total">
             <h3>Annual Yoast stack</h3>
@@ -107,13 +125,6 @@
             <h3>Rank Math (Agency)</h3>
             <div class="v" id="rmTotal">$0</div>
           </div>
-        </div>
-        <div class="save">
-          <div>
-            <div class="muted">Estimated savings with Rank Math</div>
-            <div class="delta" id="savings">$0</div>
-          </div>
-          <div class="muted" id="savingsPct">0% cheaper</div>
         </div>
         <table>
           <thead>
@@ -144,7 +155,7 @@
       ADDON_PRESETS.forEach(a=>{
         const row=document.createElement('div');
         row.className='addon';
-        row.innerHTML=`<input type="checkbox" id="chk_${a.key}" ${a.enabled?'checked':''}><label for="chk_${a.key}">${a.label}</label><input type="number" id="price_${a.key}" min="0" value="${a.defaultPrice}">`;
+        row.innerHTML=`<input type=\"checkbox\" id=\"chk_${a.key}\" ${a.enabled?'checked':''}><label for=\"chk_${a.key}\">${a.label}</label><input type=\"number\" id=\"price_${a.key}\" min=\"0\" value=\"${a.defaultPrice}\">`;
         box.appendChild(row);
       });
     }
