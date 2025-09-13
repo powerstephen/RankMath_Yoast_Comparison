@@ -1,6 +1,6 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/roi-calculator", "destination": "/public/roi-calculator.html" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/roi-calculator", "destination": "/roi-calculator.html" }
   ]
 }
