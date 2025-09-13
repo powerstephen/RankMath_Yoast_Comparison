@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agency SEO Cost & ROI Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    // Simple, dependency-free formatting helpers
+    function fmtCurrency(n) {
+      const v = isFinite(+n) ? +n : 0;
+      return v.toLocaleString(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #0b0f17; /* deep navy */
+      --panel: #121827; /* ink */
+      --accent: #7c5cff; /* purple */
+      --accent-2: #22d3ee; /* cyan */
+      --ink: #dbe4ff; /* soft white */
+      --muted: #9aa4b2; /* slate */
+      --good: #16a34a; /* green */
+      --bad: #ef4444;  /* red */
+      --card-radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px; background: radial-gradient(1200px 800px at 75% -10%, rgba(34,211,238,.15), transparent 60%),
+      radial-gradient(900px 700px at -10% 30%, rgba(124,92,255,.18), transparent 60%), var(--bg);
+      color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--muted); margin-bottom: 28px; }
+    .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: start; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.06); border-radius: var(--card-radius); box-shadow: var(--shadow); }
+    .card .hd { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.06); display:flex; align-items:center; justify-content:space-between; }
+    .card .bd { padding: 18px; }
+    .pill { font-size: 12px; color: #0b0f17; background: linear-gradient(90deg, var(--accent), var(--accent-2)); padding: 6px 10px; border-radius: 999px; font-weight: 700; letter-spacing:.02em; }
+
+    .fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    label { font-size: 13px; color: var(--muted); }
+    input, select { appearance:none; background:#0e1525; color:var(--ink); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:12px 12px; font-size:14px; outline:none; transition:border-color .2s, box-shadow .2s; }
+    input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 4px rgba(34,211,238,.15); }
+
+    .muted { color: var(--muted); font-size: 13px; }
+    .totals { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .total { background:#0d1422; border:1px dashed rgba(255,255,255,.08); border-radius:14px; padding:14px; }
+    .total h3 { margin:0 0 8px; font-size:13px; color:var(--muted); font-weight:600; }
+    .total .v { font-size:22px; font-weight:800; }
+
+    .compare { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .chip { font-size:12px; border-radius:999px; padding:6px 10px; display:inline-flex; gap:8px; align-items:center; border:1px solid rgba(255,255,255,.08); background:#0c1320; }
+    .chip .dot { width:8px; height:8px; border-radius:999px; }
+
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.06); font-size:14px; }
+    th { color: var(--muted); font-weight:600; }
+    tfoot td { border-top:1px solid rgba(255,255,255,.08); font-weight:800; }
+
+    .save { display:flex; align-items:center; justify-content:space-between; margin-top:14px; background: linear-gradient(90deg, rgba(34,211,238,.18), rgba(124,92,255,.18)); border:1px solid rgba(124,92,255,.3); padding:14px; border-radius:14px; }
+    .save .delta { font-weight:800; font-size:20px; }
+    .save .tag { font-size:12px; color:var(--muted); }
+    .green { color: var(--good); }
+    .red { color: var(--bad); }
+
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Agency SEO Cost & ROI Calculator</h1>
+    <div class="subtitle">Estimate annual costs for managing multiple WordPress client sites and quantify savings with <strong>Rank Math</strong>. All inputs are editable to match real pricing.</div>
+
+    <div class="grid">
+      <!-- Inputs -->
+      <section class="card">
+        <div class="hd">
+          <strong>Inputs</strong>
+          <span class="pill">Editable</span>
+        </div>
+        <div class="bd">
+          <div class="fields">
+            <div class="field">
+              <label>Number of client sites</label>
+              <input type="number" id="sites" min="1" value="50" />
+            </div>
+            <div class="field">
+              <label>Currency (display only)</label>
+              <select id="currency">
+                <option value="USD" selected>USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Yoast Premium – cost per site / year</label>
+              <input type="number" id="yoastPerSite" min="0" value="99" />
+            </div>
+            <div class="field">
+              <label>Yoast add-ons – per site / year (avg)</label>
+              <input type="number" id="yoastAddons" min="0" value="60" />
+            </div>
+
+            <div class="field">
+              <label>AIOSEO – 100-site plan (annual)</label>
+              <input type="number" id="aioseo100" min="0" value="399" />
+            </div>
+            <div class="field">
+              <label>AIOSEO – 10-site plan (annual)</label>
+              <input type="number" id="aioseo10" min="0" value="199" />
+            </div>
+
+            <div class="field">
+              <label>SurferSEO – monthly plan (credits)</label>
+              <input type="number" id="surferMonthly" min="0" value="119" />
+            </div>
+            <div class="field">
+              <label>Rank Math – Agency plan (annual)</label>
+              <input type="number" id="rankmathAgency" min="0" value="499" />
+            </div>
+          </div>
+          <p class="muted" style="margin-top:12px">Note: Values are placeholders. Update to match current pricing and your stack.</p>
+        </div>
+      </section>
+
+      <!-- Summary -->
+      <section class="card">
+        <div class="hd">
+          <strong>Summary</strong>
+          <span class="pill">Auto-updates</span>
+        </div>
+        <div class="bd">
+          <div class="totals">
+            <div class="total">
+              <h3>Annual cost with Rank Math</h3>
+              <div class="v" id="rankMathTotal">$499</div>
+            </div>
+            <div class="total">
+              <h3>Your current annual stack</h3>
+              <div class="v" id="currentTotal">$0</div>
+            </div>
+          </div>
+
+          <div class="save">
+            <div>
+              <div class="tag">Estimated annual savings vs. your current stack</div>
+              <div class="delta" id="savings">$0</div>
+            </div>
+            <div class="muted" id="savingsPct">0% cheaper</div>
+          </div>
+
+          <div style="margin-top:14px" class="muted">Assumes Yoast priced per-site (Premium + add-ons), AIOSEO by tier, and Surfer as an optional add-on. Edit inputs to reflect your reality.</div>
+        </div>
+      </section>
+
+      <!-- Detailed Comparison -->
+      <section class="card" style="grid-column: 1 / -1;">
+        <div class="hd">
+          <strong>Detailed Comparison (Annual)</strong>
+          <span class="pill">Breakdown</span>
+        </div>
+        <div class="bd">
+          <div class="compare" style="margin-bottom:10px">
+            <span class="chip"><span class="dot" style="background:var(--accent)"></span> WordPress-native plugins</span>
+            <span class="chip"><span class="dot" style="background:var(--accent-2)"></span> External / add-on tools</span>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Stack Item</th>
+                <th>Formula</th>
+                <th>Annual Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Yoast SEO (Premium + add-ons)</td>
+                <td id="yoastFormula" class="muted"></td>
+                <td id="yoastCost"></td>
+              </tr>
+              <tr>
+                <td>AIOSEO (best-fit tier)</td>
+                <td id="aioseoFormula" class="muted"></td>
+                <td id="aioseoCost"></td>
+              </tr>
+              <tr>
+                <td>SurferSEO (optional)</td>
+                <td id="surferFormula" class="muted"></td>
+                <td id="surferCost"></td>
+              </tr>
+              <tr>
+                <td><strong>Rank Math (Agency)</strong></td>
+                <td id="rmFormula" class="muted"></td>
+                <td id="rmCost"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><strong>Current stack total (Yoast + AIOSEO + Surfer)</strong></td>
+                <td></td>
+                <td id="stackTotal"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const el = id => document.getElementById(id);
+
+    function calc() {
+      const sites = +el('sites').value || 0;
+      const yoastPerSite = +el('yoastPerSite').value || 0;
+      const yoastAddons = +el('yoastAddons').value || 0;
+      const aioseo100 = +el('aioseo100').value || 0;
+      const aioseo10 = +el('aioseo10').value || 0;
+      const surferMonthly = +el('surferMonthly').value || 0;
+      const rankmathAgency = +el('rankmathAgency').value || 0;
+
+      // Yoast = sites * (premium + addons)
+      const yoast = sites * (yoastPerSite + yoastAddons);
+      el('yoastFormula').textContent = `${sites} × (${fmtCurrency(yoastPerSite)} + ${fmtCurrency(yoastAddons)})`;
+      el('yoastCost').textContent = fmtCurrency(yoast);
+
+      // AIOSEO tier selection (very simplified): choose 10-site if sites <=10, else 100-site.
+      const aioseo = sites <= 10 ? aioseo10 : aioseo100; 
+      const aioseoTier = sites <= 10 ? '10-site' : '100-site';
+      el('aioseoFormula').textContent = `${aioseoTier} plan`;
+      el('aioseoCost').textContent = fmtCurrency(aioseo);
+
+      // Surfer = monthly * 12 (optional)
+      const surfer = surferMonthly * 12;
+      el('surferFormula').textContent = `${fmtCurrency(surferMonthly)} × 12`;
+      el('surferCost').textContent = fmtCurrency(surfer);
+
+      // Rank Math = flat agency price
+      const rm = rankmathAgency;
+      el('rmFormula').textContent = `Flat annual`;
+      el('rmCost').textContent = fmtCurrency(rm);
+
+      // Stack totals & savings vs Rank Math
+      const stack = yoast + aioseo + surfer;
+      el('stackTotal').textContent = fmtCurrency(stack);
+
+      el('rankMathTotal').textContent = fmtCurrency(rm);
+      el('currentTotal').textContent = fmtCurrency(stack);
+
+      const savings = Math.max(0, stack - rm);
+      el('savings').textContent = fmtCurrency(savings);
+      const pct = stack > 0 ? Math.round((savings / stack) * 100) : 0;
+      el('savingsPct').textContent = `${pct}% cheaper`;
+    }
+
+    ['sites','yoastPerSite','yoastAddons','aioseo100','aioseo10','surferMonthly','rankmathAgency','currency'].forEach(id=>{
+      el(id).addEventListener('input', calc);
+      el(id).addEventListener('change', calc);
+    });
+
+    // initial render
+    calc();
+  </script>
+</body>
+</html>
